@@ -10,7 +10,7 @@
     "build:backend": "tsc -p backend/tsconfig.json",
     "start": "next start",
     "start:backend": "node backend/dist/server.js",
-    "lint": "next lint",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "pipeline:products": "tsx scripts/build-shopify-csv.ts",
     "pipeline:inventory": "tsx scripts/build-inventory-csv.ts",
     "pipeline:all": "npm run pipeline:products && npm run pipeline:inventory",
