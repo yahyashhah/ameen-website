@@ -1,7 +1,11 @@
 import { Router, Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
+import { paymentLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
+
+// Apply payment rate limiting
+router.use(paymentLimiter);
 
 // Stripe payment intent
 router.post('/stripe/create-intent', async (req: AuthRequest, res: Response) => {
