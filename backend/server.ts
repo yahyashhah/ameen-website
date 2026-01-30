@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import dotenv from 'dotenv';
 import { connectDB } from './config/database';
+import { apiLimiter } from './middleware/rateLimiter';
 import authRoutes from './routes/auth';
 import productRoutes from './routes/products';
 import orderRoutes from './routes/orders';
@@ -24,6 +25,9 @@ app.use(cors({
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Apply rate limiting to all routes
+app.use(apiLimiter);
 
 // Health check
 app.get('/health', (req: Request, res: Response) => {

@@ -2,8 +2,12 @@ import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import User from '../models/User';
 import { generateToken } from '../utils/jwt';
+import { authLimiter } from '../middleware/rateLimiter';
 
 const router = Router();
+
+// Apply auth rate limiting to all auth routes
+router.use(authLimiter);
 
 // Register
 router.post('/register',

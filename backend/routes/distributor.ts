@@ -1,11 +1,17 @@
 import { Router, Response } from 'express';
 import { authenticate, requireAdmin, AuthRequest } from '../middleware/auth';
+import { adminLimiter } from '../middleware/rateLimiter';
 import Product from '../models/Product';
 
 const router = Router();
 
+// Apply admin rate limiting
+router.use(authenticate);
+router.use(requireAdmin);
+router.use(adminLimiter);
+
 // Sync inventory from distributor feed
-router.post('/sync-inventory', authenticate, requireAdmin, async (req: AuthRequest, res: Response) => {
+router.post('/sync-inventory', async (req: AuthRequest, res: Response) => {
   try {
     const { items } = req.body; // Array of { sku, inventory }
 
@@ -42,7 +48,7 @@ router.post('/sync-inventory', authenticate, requireAdmin, async (req: AuthReque
 });
 
 // Import products from distributor feed
-router.post('/import-products', authenticate, requireAdmin, async (req: AuthRequest, res: Response) => {
+router.post('/import-products', async (req: AuthRequest, res: Response) => {
   try {
     const { products } = req.body;
 
