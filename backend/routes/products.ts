@@ -1,13 +1,13 @@
-import { Router, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import Product from '../models/Product';
 import { authenticate, requireAdmin, AuthRequest } from '../middleware/auth';
 
 const router = Router();
 
 // Get all products (public)
-router.get('/', async (req: AuthRequest, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
-    const { page = 1, limit = 12, category, search, featured } = req.query;
+    const { page = 1, limit = 12, category, search, featured } = req.query as any;
     
     const query: any = { active: true };
     
@@ -50,7 +50,7 @@ router.get('/', async (req: AuthRequest, res: Response) => {
 });
 
 // Get single product (public)
-router.get('/:handle', async (req: AuthRequest, res: Response) => {
+router.get('/:handle', async (req: Request, res: Response) => {
   try {
     const product = await Product.findOne({ handle: req.params.handle, active: true });
     
@@ -66,9 +66,9 @@ router.get('/:handle', async (req: AuthRequest, res: Response) => {
 });
 
 // Create product (admin only)
-router.post('/', authenticate, requireAdmin, async (req: AuthRequest, res: Response) => {
+router.post('/', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
-    const product = new Product(req.body);
+    const product = new Product((req as AuthRequest).body as any);
     await product.save();
     res.status(201).json(product);
   } catch (error) {
@@ -78,11 +78,11 @@ router.post('/', authenticate, requireAdmin, async (req: AuthRequest, res: Respo
 });
 
 // Update product (admin only)
-router.put('/:id', authenticate, requireAdmin, async (req: AuthRequest, res: Response) => {
+router.put('/:id', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      (req as AuthRequest).body as any,
       { new: true, runValidators: true }
     );
 
@@ -98,9 +98,9 @@ router.put('/:id', authenticate, requireAdmin, async (req: AuthRequest, res: Res
 });
 
 // Update inventory (admin only)
-router.patch('/:id/inventory', authenticate, requireAdmin, async (req: AuthRequest, res: Response) => {
+router.patch('/:id/inventory', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { inventory } = req.body;
+    const { inventory } = (req as AuthRequest).body as any;
     
     const product = await Product.findByIdAndUpdate(
       req.params.id,

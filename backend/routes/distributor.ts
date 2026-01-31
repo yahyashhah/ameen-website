@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import { authenticate, requireAdmin, AuthRequest } from '../middleware/auth';
 import { adminLimiter } from '../middleware/rateLimiter';
 import Product from '../models/Product';
@@ -11,9 +11,9 @@ router.use(requireAdmin);
 router.use(adminLimiter);
 
 // Sync inventory from distributor feed
-router.post('/sync-inventory', async (req: AuthRequest, res: Response) => {
+router.post('/sync-inventory', async (req: Request, res: Response) => {
   try {
-    const { items } = req.body; // Array of { sku, inventory }
+    const { items } = (req as AuthRequest).body as any; // Array of { sku, inventory }
 
     let updated = 0;
     let errors = 0;
@@ -48,9 +48,9 @@ router.post('/sync-inventory', async (req: AuthRequest, res: Response) => {
 });
 
 // Import products from distributor feed
-router.post('/import-products', async (req: AuthRequest, res: Response) => {
+router.post('/import-products', async (req: Request, res: Response) => {
   try {
-    const { products } = req.body;
+    const { products } = (req as AuthRequest).body as any;
 
     let created = 0;
     let updated = 0;

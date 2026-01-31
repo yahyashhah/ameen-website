@@ -13,7 +13,6 @@ export default function Header() {
           <a href="/support" className="hover:underline">Support</a>
           <a href="/about" className="hover:underline">About</a>
           <a href="/contact" className="hover:underline">Contact</a>
-          {/* @ts-expect-error Async Server Component */}
           <CartCount />
         </nav>
         <button className="md:hidden">

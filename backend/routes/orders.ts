@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import Order from '../models/Order';
 import Product from '../models/Product';
 import { authenticate, requireAdmin, AuthRequest } from '../middleware/auth';
@@ -6,9 +6,9 @@ import { authenticate, requireAdmin, AuthRequest } from '../middleware/auth';
 const router = Router();
 
 // Create order
-router.post('/', async (req: AuthRequest, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
   try {
-    const { items, customerEmail, customerName, shippingAddress, paymentMethod } = req.body;
+    const { items, customerEmail, customerName, shippingAddress, paymentMethod } = (req as AuthRequest).body as any;
 
     // Validate inventory
     for (const item of items) {
@@ -32,7 +32,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
     // Create order
     const order = new Order({
       orderNumber,
-      userId: req.user?.userId,
+      userId: (req as AuthRequest).user?.userId,
       customerEmail,
       customerName,
       items,
@@ -61,9 +61,9 @@ router.post('/', async (req: AuthRequest, res: Response) => {
 });
 
 // Get orders (admin only)
-router.get('/', authenticate, requireAdmin, async (req: AuthRequest, res: Response) => {
+router.get('/', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { page = 1, limit = 20, status } = req.query;
+    const { page = 1, limit = 20, status } = req.query as any;
     
     const query: any = {};
     if (status) {
@@ -93,7 +93,7 @@ router.get('/', authenticate, requireAdmin, async (req: AuthRequest, res: Respon
 });
 
 // Get single order
-router.get('/:id', async (req: AuthRequest, res: Response) => {
+router.get('/:id', async (req: Request, res: Response) => {
   try {
     const order = await Order.findById(req.params.id);
     
@@ -102,8 +102,9 @@ router.get('/:id', async (req: AuthRequest, res: Response) => {
     }
 
     // Check if user owns this order or is admin
-    if (req.user) {
-      if (order.userId?.toString() !== req.user.userId && req.user.role !== 'admin') {
+    const authReq = req as AuthRequest;
+    if (authReq.user) {
+      if (order.userId?.toString() !== authReq.user.userId && authReq.user.role !== 'admin') {
         return res.status(403).json({ error: 'Access denied' });
       }
     }
@@ -116,9 +117,9 @@ router.get('/:id', async (req: AuthRequest, res: Response) => {
 });
 
 // Update order status (admin only)
-router.patch('/:id/status', authenticate, requireAdmin, async (req: AuthRequest, res: Response) => {
+router.patch('/:id/status', authenticate, requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { status, trackingNumber, notes } = req.body;
+    const { status, trackingNumber, notes } = (req as AuthRequest).body as any;
     
     const order = await Order.findByIdAndUpdate(
       req.params.id,

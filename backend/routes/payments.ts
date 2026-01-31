@@ -1,4 +1,4 @@
-import { Router, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import { AuthRequest } from '../middleware/auth';
 import { paymentLimiter } from '../middleware/rateLimiter';
 
@@ -8,9 +8,9 @@ const router = Router();
 router.use(paymentLimiter);
 
 // Stripe payment intent
-router.post('/stripe/create-intent', async (req: AuthRequest, res: Response) => {
+router.post('/stripe/create-intent', async (req: Request, res: Response) => {
   try {
-    const { amount } = req.body;
+    const { amount } = (req as AuthRequest).body as any;
 
     // Stripe integration would go here
     // For now, return a mock response
@@ -25,9 +25,9 @@ router.post('/stripe/create-intent', async (req: AuthRequest, res: Response) => 
 });
 
 // PayPal create order
-router.post('/paypal/create-order', async (req: AuthRequest, res: Response) => {
+router.post('/paypal/create-order', async (req: Request, res: Response) => {
   try {
-    const { amount } = req.body;
+    const { amount } = (req as AuthRequest).body as any;
 
     // PayPal integration would go here
     // For now, return a mock response
@@ -42,7 +42,7 @@ router.post('/paypal/create-order', async (req: AuthRequest, res: Response) => {
 });
 
 // Webhook handler for payment confirmations
-router.post('/webhook', async (req: AuthRequest, res: Response) => {
+router.post('/webhook', async (req: Request, res: Response) => {
   try {
     // Handle payment webhooks here
     res.json({ received: true });

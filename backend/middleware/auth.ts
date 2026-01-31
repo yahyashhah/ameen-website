@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import { verifyToken } from '../utils/jwt';
 
 export interface AuthRequest extends Request {
@@ -9,35 +9,41 @@ export interface AuthRequest extends Request {
   };
 }
 
-export const authenticate = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const authenticate: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const authHeader = req.headers.authorization;
     
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'No token provided' });
+      res.status(401).json({ error: 'No token provided' });
+      return;
     }
 
     const token = authHeader.substring(7);
     const decoded = verifyToken(token);
 
     if (!decoded) {
-      return res.status(401).json({ error: 'Invalid or expired token' });
+      res.status(401).json({ error: 'Invalid or expired token' });
+      return;
     }
 
-    req.user = decoded;
+    (req as AuthRequest).user = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ error: 'Authentication failed' });
+    res.status(401).json({ error: 'Authentication failed' });
+    return;
   }
 };
 
-export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
-  if (!req.user) {
-    return res.status(401).json({ error: 'Not authenticated' });
+export const requireAdmin: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
+  const authReq = req as AuthRequest;
+  if (!authReq.user) {
+    res.status(401).json({ error: 'Not authenticated' });
+    return;
   }
 
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ error: 'Admin access required' });
+  if (authReq.user.role !== 'admin') {
+    res.status(403).json({ error: 'Admin access required' });
+    return;
   }
 
   next();

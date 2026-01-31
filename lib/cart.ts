@@ -4,26 +4,18 @@ import { cartCreateEmpty, cartLinesAdd, cartLinesRemove, cartLinesUpdate, getCar
 const CART_COOKIE = 'cartId';
 
 export async function getOrCreateCart() {
-  const store = cookies();
-  let id = store.get(CART_COOKIE)?.value;
-  if (!id) {
-    const cart = await cartCreateEmpty();
-    id = cart.id;
-    store.set(CART_COOKIE, id, { httpOnly: true, path: '/', sameSite: 'lax' });
-    return await getCart(id);
-  }
+  const store = await cookies();
+  const id = store.get(CART_COOKIE)?.value;
+  if (!id) return null as any;
   try {
     return await getCart(id);
   } catch {
-    const cart = await cartCreateEmpty();
-    id = cart.id;
-    store.set(CART_COOKIE, id, { httpOnly: true, path: '/', sameSite: 'lax' });
-    return await getCart(id);
+    return null as any;
   }
 }
 
 export async function addToCart(variantId: string, quantity = 1) {
-  const store = cookies();
+  const store = await cookies();
   let id = store.get(CART_COOKIE)?.value;
   if (!id) {
     const cart = await cartCreateEmpty();
@@ -35,15 +27,15 @@ export async function addToCart(variantId: string, quantity = 1) {
 }
 
 export async function updateLine(lineId: string, quantity: number) {
-  const id = cookies().get(CART_COOKIE)?.value;
-  if (!id) return null;
+  const id = (await cookies()).get(CART_COOKIE)?.value;
+  if (!id) return null as any;
   await cartLinesUpdate(id, [{ id: lineId, quantity }]);
   return await getCart(id);
 }
 
 export async function removeLine(lineId: string) {
-  const id = cookies().get(CART_COOKIE)?.value;
-  if (!id) return null;
+  const id = (await cookies()).get(CART_COOKIE)?.value;
+  if (!id) return null as any;
   await cartLinesRemove(id, [lineId]);
   return await getCart(id);
 }
