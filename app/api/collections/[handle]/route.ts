@@ -60,9 +60,9 @@ function buildCollections() {
   ];
 }
 
-export async function GET(_: Request, context: { params: Promise<{ handle: string }> }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ handle: string }> }) {
   try {
-    const { handle } = await context.params;
+    const { handle } = await params;
     const collections = buildCollections();
     const collection = collections.find((c) => c.handle === handle);
     if (!collection) return NextResponse.json({ error: 'Not found' }, { status: 404 });

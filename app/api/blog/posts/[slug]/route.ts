@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(_: Request, context: { params: Promise<{ slug: string }> }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const { slug } = await context.params;
+    const { slug } = await params;
     const base = {
       id: 'post-1',
       slug: 'optimize-your-workspace-2026',

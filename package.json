@@ -4,19 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:backend": "tsx watch backend/server.ts",
-    "dev:all": "concurrently \"npm run dev\" \"npm run dev:backend\"",
     "build": "next build",
-    "build:backend": "tsc -p backend/tsconfig.json",
     "start": "next start",
-    "start:backend": "node backend/dist/server.js",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "pipeline:products": "tsx scripts/build-shopify-csv.ts",
     "pipeline:inventory": "tsx scripts/build-inventory-csv.ts",
     "pipeline:all": "npm run pipeline:products && npm run pipeline:inventory",
     "db:init": "tsx scripts/db-init.ts",
     "db:seed": "tsx scripts/db-seed.ts",
-    "import:distributor": "tsx scripts/import-distributor.ts"
+    "import:distributor": "tsx scripts/import-distributor.ts",
+    "import:tdsynnex": "tsx scripts/fetch-tdsynnex.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
