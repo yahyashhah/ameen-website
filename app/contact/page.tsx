@@ -12,7 +12,7 @@ export default function ContactPage() {
     <div className="max-w-6xl mx-auto px-6 py-12">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-        <p className="text-xl text-gray-600">We're here to help with any questions or concerns</p>
+        <p className="text-xl text-gray-600">We&apos;re here to help with any questions or concerns</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-12">
@@ -29,7 +29,7 @@ export default function ContactPage() {
               <div>
                 <h3 className="font-semibold mb-1">Email</h3>
                 <a href={`mailto:${email}`} className="text-gray-600 hover:underline">{email}</a>
-                <p className="text-sm text-gray-500 mt-1">We'll respond within 24 hours</p>
+                <p className="text-sm text-gray-500 mt-1">We&apos;ll respond within 24 hours</p>
               </div>
             </div>
 

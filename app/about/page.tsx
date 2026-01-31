@@ -13,7 +13,7 @@ export default function AboutPage() {
       <div className="text-center mb-16">
         <h1 className="text-4xl font-bold mb-4">About {brand}</h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          We're passionate about delivering premium tech accessories that enhance your daily workflow
+          We&apos;re passionate about delivering premium tech accessories that enhance your daily workflow
         </p>
       </div>
 
@@ -29,7 +29,7 @@ export default function AboutPage() {
         <div>
           <h2 className="text-2xl font-semibold mb-4">Our Mission</h2>
           <p className="text-gray-700 mb-4">
-            We're a team of product enthusiasts dedicated to building better everyday setups. Our catalog focuses on thoughtfully designed, durable accessories from trusted brands—tested for reliability in real workflows.
+            We&apos;re a team of product enthusiasts dedicated to building better everyday setups. Our catalog focuses on thoughtfully designed, durable accessories from trusted brands—tested for reliability in real workflows.
           </p>
           <p className="text-gray-700">
             From charging solutions to workspace essentials, everything is curated to help you do your best work. We partner with leading manufacturers and authorized distributors to ensure authenticity and quality.
