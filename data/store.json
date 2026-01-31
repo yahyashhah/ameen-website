@@ -257,12 +257,7 @@
       "id": "06c7819d-27fd-4424-84f8-e0b328851182",
       "lines": [
         {
-          "id": "b4e773cd-f5ec-4352-ba1f-04593f1d68f2",
-          "variantId": "var-prod-dummy-1",
-          "quantity": 1
-        },
-        {
-          "id": "68280df0-a5c1-40f4-91f0-942d3cf39b8f",
+          "id": "45bf12a0-3e4e-4b93-a305-86c9300cb041",
           "variantId": "var-prod-dummy-2",
           "quantity": 1
         }

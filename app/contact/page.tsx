@@ -1,123 +1,494 @@
-export const metadata = {
-  title: 'Contact Us',
-  description: 'Get in touch with our team for support and inquiries'
-};
+'use client';
+
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import {
+  Mail,
+  Phone,
+  Clock,
+  MapPin,
+  MessageSquare,
+  Send,
+  CheckCircle,
+  AlertCircle,
+  Headphones,
+  ArrowRight,
+} from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  TextField,
+  Alert,
+  Snackbar,
+  Grid,
+  Chip,
+  CircularProgress,
+} from '@mui/material';
 
 export default function ContactPage() {
   const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'hello@example.com';
   const phone = process.env.NEXT_PUBLIC_CONTACT_PHONE || '+1 (555) 000-0000';
   const hours = process.env.NEXT_PUBLIC_SUPPORT_HOURS || 'Mon-Fri, 9am-5pm EST';
-  
+  const address = process.env.NEXT_PUBLIC_COMPANY_ADDRESS || '123 Tech Street, San Francisco, CA 94107';
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success' as 'success' | 'error',
+  });
+
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+
+  const contactOptions = [
+    {
+      icon: Mail,
+      title: 'Email',
+      value: email,
+      description: 'We\'ll respond within 24 hours',
+      action: `mailto:${email}`,
+      color: 'blue',
+    },
+    {
+      icon: Phone,
+      title: 'Phone',
+      value: phone,
+      description: hours,
+      action: `tel:${phone}`,
+      color: 'green',
+    },
+    {
+      icon: Clock,
+      title: 'Support Hours',
+      value: hours,
+      description: 'Closed on weekends and holidays',
+      color: 'orange',
+    },
+    {
+      icon: MapPin,
+      title: 'Office',
+      value: address,
+      description: 'Visit us during business hours',
+      color: 'purple',
+    },
+  ];
+
+  const validateForm = () => {
+    const newErrors = {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    };
+
+    let isValid = true;
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+      isValid = false;
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+      isValid = false;
+    }
+
+    if (!formData.subject.trim()) {
+      newErrors.subject = 'Subject is required';
+      isValid = false;
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSnackbar({
+          open: true,
+          message: 'Message sent successfully! We\'ll get back to you soon.',
+          severity: 'success',
+        });
+        
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+        });
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      setSnackbar({
+        open: true,
+        message: 'Failed to send message. Please try again.',
+        severity: 'error',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (field: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: '' }));
+    }
+  };
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-        <p className="text-xl text-gray-600">We&apos;re here to help with any questions or concerns</p>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-12">
-        <div>
-          <h2 className="text-2xl font-semibold mb-6">Get in Touch</h2>
-          
-          <div className="space-y-6">
-            <div className="flex items-start gap-4">
-              <div className="bg-gray-100 rounded-full p-3">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-1">Email</h3>
-                <a href={`mailto:${email}`} className="text-gray-600 hover:underline">{email}</a>
-                <p className="text-sm text-gray-500 mt-1">We&apos;ll respond within 24 hours</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="bg-gray-100 rounded-full p-3">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-1">Phone</h3>
-                <a href={`tel:${phone}`} className="text-gray-600 hover:underline">{phone}</a>
-                <p className="text-sm text-gray-500 mt-1">{hours}</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="bg-gray-100 rounded-full p-3">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold mb-1">Support Hours</h3>
-                <p className="text-gray-600">{hours}</p>
-                <p className="text-sm text-gray-500 mt-1">Closed on weekends and holidays</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 p-6 bg-gray-50 rounded-lg">
-            <h3 className="font-semibold mb-2">Before contacting us</h3>
-            <p className="text-gray-600 text-sm mb-3">Check out our FAQ page for quick answers to common questions.</p>
-            <a href="/support" className="text-sm font-medium hover:underline">Visit Support Center →</a>
-          </div>
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden bg-linear-to-br from-gray-900 to-black">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-grid-white/[0.02]" />
         </div>
-
-        <div>
-          <form className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Name *</label>
-              <input 
-                type="text" 
-                required 
-                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black" 
-              />
-            </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
+          >
+            <Chip
+              label="Get in Touch"
+              className="bg-linear-to-r from-purple-600 to-pink-500 text-white mb-6 px-4 py-1"
+              icon={<MessageSquare className="w-4 h-4" />}
+            />
             
-            <div>
-              <label className="block text-sm font-medium mb-2">Email *</label>
-              <input 
-                type="email" 
-                required 
-                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black" 
-              />
-            </div>
+            <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+              We're Here to{' '}
+              <span className="bg-linear-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Help
+              </span>
+            </h1>
             
-            <div>
-              <label className="block text-sm font-medium mb-2">Subject *</label>
-              <input 
-                type="text" 
-                required 
-                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black" 
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-2">Message *</label>
-              <textarea 
-                rows={6} 
-                required 
-                className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
-              ></textarea>
-            </div>
-            
-            <button 
-              type="submit" 
-              className="w-full bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition"
-            >
-              Send Message
-            </button>
-            
-            <p className="text-xs text-gray-500 text-center">
-              By submitting this form, you agree to our privacy policy.
+            <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+              Have questions or need assistance? Our dedicated team is ready to help you with anything from product inquiries to technical support.
             </p>
-          </form>
+          </motion.div>
         </div>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <Grid container spacing={8}>
+          {/* Contact Information */}
+          <Grid item xs={12} lg={5}>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <Typography variant="h4" className="font-bold mb-8">
+                Contact Information
+              </Typography>
+              
+              <div className="space-y-6 mb-8">
+                {contactOptions.map((option, index) => (
+                  <motion.div
+                    key={option.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Card className="rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-4">
+                          <div className={`p-3 bg-${option.color}-100 rounded-xl`}>
+                            <option.icon className={`w-6 h-6 text-${option.color}-600`} />
+                          </div>
+                          <div className="flex-1">
+                            <Typography variant="h6" className="font-bold mb-1">
+                              {option.title}
+                            </Typography>
+                            <Typography variant="body1" className="mb-2">
+                              {option.value}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              {option.description}
+                            </Typography>
+                            {option.action && (
+                              <Button
+                                variant="text"
+                                className={`mt-3 text-${option.color}-600 hover:text-${option.color}-700`}
+                                href={option.action}
+                                startIcon={<Send className="w-4 h-4" />}
+                              >
+                                {option.title === 'Email' ? 'Send Email' : option.title === 'Phone' ? 'Call Now' : 'Get Directions'}
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Support Notice */}
+              <Card className="rounded-2xl bg-linear-to-r from-blue-50 to-cyan-50 border-blue-100">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <Headphones className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div>
+                      <Typography variant="h6" className="font-bold mb-2">
+                        Need Quick Help?
+                      </Typography>
+                      <Typography variant="body2" className="text-gray-600 mb-3">
+                        Check our FAQ page for instant answers to common questions about orders, shipping, returns, and more.
+                      </Typography>
+                      <Button
+                        variant="text"
+                        className="text-blue-600 hover:text-blue-700"
+                        href="/support"
+                        startIcon={<ArrowRight className="w-4 h-4" />}
+                      >
+                        Visit Support Center
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Response Time */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="mt-8"
+              >
+                <Alert severity="info" className="rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5" />
+                    <div>
+                      <div className="font-medium">Typical Response Time</div>
+                      <div className="text-sm">Email: Within 24 hours • Phone: During business hours</div>
+                    </div>
+                  </div>
+                </Alert>
+              </motion.div>
+            </motion.div>
+          </Grid>
+
+          {/* Contact Form */}
+          <Grid item xs={12} lg={7}>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <Card className="rounded-2xl shadow-lg">
+                <CardContent className="p-8">
+                  <Typography variant="h4" className="font-bold mb-2">
+                    Send us a Message
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" className="mb-8">
+                    Fill out the form below and we'll get back to you as soon as possible
+                  </Typography>
+
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <Grid container spacing={4}>
+                      <Grid item xs={12} md={6}>
+                        <TextField
+                          fullWidth
+                          label="Full Name"
+                          value={formData.name}
+                          onChange={(e) => handleChange('name', e.target.value)}
+                          error={!!errors.name}
+                          helperText={errors.name}
+                          required
+                          disabled={loading}
+                          className="bg-white"
+                        />
+                      </Grid>
+                      
+                      <Grid item xs={12} md={6}>
+                        <TextField
+                          fullWidth
+                          label="Email Address"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => handleChange('email', e.target.value)}
+                          error={!!errors.email}
+                          helperText={errors.email}
+                          required
+                          disabled={loading}
+                          className="bg-white"
+                        />
+                      </Grid>
+                      
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label="Subject"
+                          value={formData.subject}
+                          onChange={(e) => handleChange('subject', e.target.value)}
+                          error={!!errors.subject}
+                          helperText={errors.subject}
+                          required
+                          disabled={loading}
+                          className="bg-white"
+                        />
+                      </Grid>
+                      
+                      <Grid item xs={12}>
+                        <TextField
+                          fullWidth
+                          label="Your Message"
+                          value={formData.message}
+                          onChange={(e) => handleChange('message', e.target.value)}
+                          error={!!errors.message}
+                          helperText={errors.message}
+                          required
+                          multiline
+                          rows={6}
+                          disabled={loading}
+                          className="bg-white"
+                        />
+                      </Grid>
+                    </Grid>
+
+                    <div className="space-y-4">
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        className="bg-linear-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 w-full py-3 rounded-xl text-lg font-bold"
+                        disabled={loading}
+                        startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <Send className="w-5 h-5" />}
+                      >
+                        {loading ? 'Sending...' : 'Send Message'}
+                      </Button>
+                      
+                      <Typography variant="caption" color="textSecondary" className="text-center block">
+                        By submitting this form, you agree to our{' '}
+                        <a href="/policies/privacy" className="text-purple-600 hover:underline">
+                          Privacy Policy
+                        </a>
+                        . We'll never share your information.
+                      </Typography>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+
+              {/* FAQ Preview */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="mt-8"
+              >
+                <Typography variant="h6" className="font-bold mb-4">
+                  Frequently Asked Questions
+                </Typography>
+                
+                <div className="space-y-3">
+                  {[
+                    {
+                      question: 'What is your return policy?',
+                      answer: '30-day return window for unused items in original packaging',
+                    },
+                    {
+                      question: 'Do you ship internationally?',
+                      answer: 'Yes, we ship to 50+ countries worldwide',
+                    },
+                    {
+                      question: 'How can I track my order?',
+                      answer: 'Tracking information is emailed once your order ships',
+                    },
+                  ].map((faq, index) => (
+                    <Card key={index} className="rounded-xl">
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="p-1 bg-gray-100 rounded">
+                            <MessageSquare className="w-4 h-4 text-gray-600" />
+                          </div>
+                          <div>
+                            <Typography variant="subtitle2" className="font-bold mb-1">
+                              {faq.question}
+                            </Typography>
+                            <Typography variant="body2" color="textSecondary">
+                              {faq.answer}
+                            </Typography>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  className="mt-4 rounded-xl"
+                  href="/support"
+                  startIcon={<ArrowRight className="w-4 h-4" />}
+                >
+                  View All FAQs
+                </Button>
+              </motion.div>
+            </motion.div>
+          </Grid>
+        </Grid>
       </div>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert
+          severity={snackbar.severity}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          className="rounded-xl shadow-lg"
+          icon={snackbar.severity === 'success' ? <CheckCircle className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

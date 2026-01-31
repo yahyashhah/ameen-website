@@ -28,7 +28,7 @@ export default function Newsletter() {
     <div className="bg-gray-900 text-white py-12">
       <div className="max-w-6xl mx-auto px-6 text-center">
         <h2 className="text-2xl font-bold mb-3">Stay Updated</h2>
-        <p className="text-gray-300 mb-6">
+        <p className="text-gray-300  border-md mb-6">
           Get the latest products, exclusive deals, and tech tips delivered to your inbox.
         </p>
         
@@ -41,7 +41,7 @@ export default function Newsletter() {
               placeholder="Enter your email"
               required
               disabled={status === 'loading'}
-              className="flex-1 px-4 py-3 rounded text-black focus:outline-none focus:ring-2 focus:ring-white"
+              className="flex-1 px-4 py-3 bg-white border-md rounded text-black focus:outline-none focus:ring-2 focus:ring-white"
             />
             <button
               type="submit"

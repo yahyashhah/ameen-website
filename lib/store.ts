@@ -24,6 +24,8 @@ export async function getProductByHandle(handle: string) {
     descriptionHtml: p.descriptionHtml || '',
     vendor: p.vendor,
     images: p.images,
+    featuredImage: p.images[0] || null,
+    price: p.price !== undefined ? { amount: String(p.price), currencyCode: 'USD' } : { amount: '0', currencyCode: 'USD' },
     variants: variants.map((v) => ({ id: v.id, title: v.title, sku: v.sku || null, price: { amount: String(v.price), currencyCode: 'USD' } })),
   };
 }
