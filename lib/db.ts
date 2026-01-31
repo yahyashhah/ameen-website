@@ -29,7 +29,16 @@ export async function getDB() {
   const adapter = new JSONFile<DBSchema>(dbFile);
   const db = new Low<DBSchema>(adapter, { products: [], variants: [], inventory: [], carts: [], orders: [], users: [] });
   await db.read();
-  db.data ||= { products: [], variants: [], inventory: [], carts: [], orders: [], users: [] };
+  const defaults: DBSchema = { products: [], variants: [], inventory: [], carts: [], orders: [], users: [] };
+  // Merge defaults to ensure all collections exist even if the JSON file is partial
+  db.data = Object.assign({}, defaults, db.data || {});
+  // Ensure arrays for each key
+  db.data.products ||= [];
+  db.data.variants ||= [];
+  db.data.inventory ||= [];
+  db.data.carts ||= [];
+  db.data.orders ||= [];
+  db.data.users ||= [];
   return db;
 }
 

@@ -10,6 +10,19 @@ const EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
 export type Session = { id: string; email: string; role: 'user'|'admin' };
 
+async function ensureAdminFromEnv() {
+  const email = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
+  if (!email || !password) return;
+  const db = await getDB();
+  const exists = db.data!.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  if (exists) return;
+  const passwordHash = await bcrypt.hash(password, 10);
+  const user: User = { id: newId(), email, name: 'Admin', passwordHash, role: 'admin' };
+  db.data!.users.push(user);
+  await db.write();
+}
+
 export async function registerUser(email: string, password: string, name?: string) {
   const db = await getDB();
   const exists = db.data!.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
@@ -23,6 +36,7 @@ export async function registerUser(email: string, password: string, name?: strin
 }
 
 export async function loginUser(email: string, password: string) {
+  await ensureAdminFromEnv();
   const db = await getDB();
   const user = db.data!.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
   if (!user) throw new Error('Invalid credentials');

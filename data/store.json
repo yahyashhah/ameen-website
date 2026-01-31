@@ -312,5 +312,14 @@
       ],
       "total": 129.98
     }
+  ],
+  "users": [
+    {
+      "id": "9b5e2053-b508-4b57-be0a-e9ac999ecdc1",
+      "email": "admin@gmail.com",
+      "name": "Admin",
+      "passwordHash": "$2a$10$RR/PvaPi8ORX6hBMyycJIO1g7on23t.8h1flbI7mnqHIdz.AcMu/i",
+      "role": "admin"
+    }
   ]
 }
