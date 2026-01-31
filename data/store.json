@@ -224,6 +224,98 @@
       "quantity": 25
     }
   ],
-  "carts": [],
-  "orders": []
+  "carts": [
+    {
+      "id": "3fd8d0d5-2add-4c41-a6f2-ba32fa104b67",
+      "lines": []
+    },
+    {
+      "id": "cf123e86-14d9-4cb0-ba9d-7b5822f18edc",
+      "lines": []
+    },
+    {
+      "id": "33a65a05-c3fd-4754-a478-8a50c8fd7a43",
+      "lines": []
+    },
+    {
+      "id": "709ca8d5-6b65-4b7f-b625-b2817dfdc3b1",
+      "lines": []
+    },
+    {
+      "id": "5546800c-5c15-43b2-ba39-db9533035a5a",
+      "lines": []
+    },
+    {
+      "id": "d6161103-d1ce-491c-bf08-ab7863750fb9",
+      "lines": []
+    },
+    {
+      "id": "ffbd8b42-5699-44d8-bfff-7ba5b6087e7b",
+      "lines": []
+    },
+    {
+      "id": "06c7819d-27fd-4424-84f8-e0b328851182",
+      "lines": [
+        {
+          "id": "b4e773cd-f5ec-4352-ba1f-04593f1d68f2",
+          "variantId": "var-prod-dummy-1",
+          "quantity": 1
+        },
+        {
+          "id": "68280df0-a5c1-40f4-91f0-942d3cf39b8f",
+          "variantId": "var-prod-dummy-2",
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord-1769845143124",
+      "createdAt": 1769845143124,
+      "status": "pending",
+      "customerName": "yahya shah",
+      "customerEmail": "ys7776660@gmail.com",
+      "shippingAddress": {
+        "line1": "Mian khel kohat",
+        "city": "kohat",
+        "country": "Pakistan",
+        "postalCode": "26000"
+      },
+      "items": [
+        {
+          "variantId": "var-prod-dummy-1",
+          "quantity": 1,
+          "price": 29.99
+        }
+      ],
+      "total": 29.99
+    },
+    {
+      "id": "ord-1769845260673",
+      "createdAt": 1769845260673,
+      "status": "pending",
+      "customerName": "yahya shah",
+      "customerEmail": "ys7776660@gmail.com",
+      "shippingAddress": {
+        "line1": "Mian khel kohat",
+        "city": "kohat",
+        "country": "Pakistan",
+        "postalCode": "26000"
+      },
+      "items": [
+        {
+          "variantId": "var-prod-dummy-1",
+          "quantity": 1,
+          "price": 29.99
+        },
+        {
+          "variantId": "var-prod-dummy-2",
+          "quantity": 1,
+          "price": 99.99
+        }
+      ],
+      "total": 129.98
+    }
+  ]
 }

@@ -61,7 +61,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ hand
           ) : null}
         </div>
         <div className="grid grid-cols-5 gap-2">
-          {images.slice(1).map((img: { url: string | StaticImport; altText: any; }, i: Key | null | undefined) => (
+          {images.slice(1).map((img: { url: string | StaticImport; altText?: string | null }, i: Key | null | undefined) => (
             <div key={i} className="aspect-square relative bg-gray-50">
               <Image src={img.url} alt={img.altText ?? title} fill className="object-contain" />
             </div>
@@ -80,8 +80,8 @@ export default async function ProductDetail({ params }: { params: Promise<{ hand
         {product ? (
           <form action={addToCartAction} className="mt-6 space-y-3">
             <select name="variant" className="border rounded px-3 py-2">
-              {product.variants.map((v: { id: Key | readonly string[] | null | undefined; title: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; price: { currencyCode: any; amount: any; }; }) => (
-                <option key={v.id} value={v.id}>
+              {product.variants.map((v: { id: string; title: string; price: { currencyCode: string; amount: string } }) => (
+                <option key={v.id as Key} value={v.id}>
                   {v.title} — {new Intl.NumberFormat(undefined, { style: 'currency', currency: v.price.currencyCode }).format(Number(v.price.amount))}
                 </option>
               ))}
