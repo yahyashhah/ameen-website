@@ -1,4 +1,6 @@
+
 'use client';
+import type { ReactElement } from 'react';
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -118,14 +120,14 @@ export default function AdminOrdersPage() {
     return matchesSearch && matchesStatus;
   });
 
-  const getStatusIcon = (status: Order['status']) => {
+  const getStatusIcon = (status: Order['status']): ReactElement | undefined => {
     switch (status) {
       case 'pending': return <Clock className="w-4 h-4 text-yellow-600" />;
       case 'processing': return <Package className="w-4 h-4 text-blue-600" />;
       case 'shipped': return <Truck className="w-4 h-4 text-purple-600" />;
       case 'delivered': return <CheckCircle className="w-4 h-4 text-green-600" />;
       case 'cancelled': return <XCircle className="w-4 h-4 text-red-600" />;
-      default: return null;
+      default: return undefined;
     }
   };
 

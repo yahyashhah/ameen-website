@@ -57,9 +57,14 @@ async function fetchDistributorProducts(): Promise<any[]> {
     // Placeholder endpoint; replace with TD SYNNEX catalog endpoint when known.
     const res = await fetch(`${API_URL}/catalog/products`, { headers });
     if (!res.ok) throw new Error(`Distributor API error: ${res.status}`);
-    const data = await res.json();
-    // Expecting data.items: adapt as needed when spec is available
-    return Array.isArray(data?.items) ? data.items : Array.isArray(data) ? data : [];
+    const data: unknown = await res.json();
+    // Accept either `{ items: [...] }` or a top-level array response
+    const hasItems = (x: unknown): x is { items: any[] } => {
+      return typeof x === 'object' && x !== null && Array.isArray((x as any).items);
+    };
+    if (hasItems(data)) return data.items;
+    if (Array.isArray(data)) return data as any[];
+    return [];
   } catch (e) {
     console.warn('Distributor API not reachable, will try CSV fallback:', (e as Error).message);
     return [];

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 import confetti from 'canvas-confetti';
@@ -16,6 +16,7 @@ import {
   Clock,
   CreditCard,
   MapPin,
+  AlertCircle,
 } from 'lucide-react';
 import {
   Card,
@@ -70,6 +71,14 @@ interface Order {
 }
 
 export default function OrderConfirmationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <OrderConfirmationContent />
+    </Suspense>
+  );
+}
+
+function OrderConfirmationContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('id');
   
@@ -82,6 +91,7 @@ export default function OrderConfirmationPage() {
     if (orderId) {
       fetchOrderDetails();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderId]);
 
   useEffect(() => {
@@ -270,9 +280,9 @@ export default function OrderConfirmationPage() {
             </div>
           </div>
 
-          <Grid container spacing={4}>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Order Summary */}
-            <Grid item xs={12} lg={4}>
+            <div className="lg:col-span-4">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -381,10 +391,10 @@ export default function OrderConfirmationPage() {
                   </CardContent>
                 </Card>
               </motion.div>
-            </Grid>
+            </div>
 
             {/* Order Details */}
-            <Grid item xs={12} lg={8}>
+            <div className="lg:col-span-8">
               <div className="space-y-6">
                 {/* Order Items */}
                 <motion.div
@@ -468,8 +478,8 @@ export default function OrderConfirmationPage() {
                         </Typography>
                       </div>
                       
-                      <Grid container spacing={4}>
-                        <Grid item xs={12} md={6}>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
                           <div className="space-y-2">
                             <Typography variant="subtitle2" color="textSecondary">
                               Shipping Address
@@ -491,9 +501,9 @@ export default function OrderConfirmationPage() {
                               </div>
                             </div>
                           </div>
-                        </Grid>
+                        </div>
                         
-                        <Grid item xs={12} md={6}>
+                        <div>
                           <div className="space-y-4">
                             <div>
                               <Typography variant="subtitle2" color="textSecondary">
@@ -525,8 +535,8 @@ export default function OrderConfirmationPage() {
                               </Typography>
                             </div>
                           </div>
-                        </Grid>
-                      </Grid>
+                        </div>
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -543,7 +553,7 @@ export default function OrderConfirmationPage() {
                         What's Next?
                       </Typography>
                       
-                      <Grid container spacing={3}>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {[
                           {
                             step: '1',
@@ -567,7 +577,7 @@ export default function OrderConfirmationPage() {
                             color: 'green',
                           },
                         ].map((step, index) => (
-                          <Grid item xs={12} md={4} key={step.step}>
+                          <div key={step.step}>
                             <Card className="rounded-xl h-full">
                               <CardContent className="p-4 text-center">
                                 <div className="flex items-center gap-3 mb-4 justify-center">
@@ -586,17 +596,17 @@ export default function OrderConfirmationPage() {
                                 </Typography>
                               </CardContent>
                             </Card>
-                          </Grid>
+                          </div>
                         ))}
-                      </Grid>
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>
               </div>
-            </Grid>
-          </Grid>
-        </motion.div>
+            </div>
+          </div>
+          </motion.div>
+        </div>
       </div>
-    </div>
   );
 }

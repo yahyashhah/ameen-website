@@ -211,9 +211,9 @@ export default function ContactPage() {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Grid container spacing={8}>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Contact Information */}
-          <Grid item xs={12} lg={5}>
+          <div className="lg:col-span-5">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -310,10 +310,10 @@ export default function ContactPage() {
                 </Alert>
               </motion.div>
             </motion.div>
-          </Grid>
+          </div>
 
           {/* Contact Form */}
-          <Grid item xs={12} lg={7}>
+          <div className="lg:col-span-7">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -329,8 +329,8 @@ export default function ContactPage() {
                   </Typography>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    <Grid container spacing={4}>
-                      <Grid item xs={12} md={6}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
                         <TextField
                           fullWidth
                           label="Full Name"
@@ -342,9 +342,9 @@ export default function ContactPage() {
                           disabled={loading}
                           className="bg-white"
                         />
-                      </Grid>
+                      </div>
                       
-                      <Grid item xs={12} md={6}>
+                      <div>
                         <TextField
                           fullWidth
                           label="Email Address"
@@ -357,9 +357,9 @@ export default function ContactPage() {
                           disabled={loading}
                           className="bg-white"
                         />
-                      </Grid>
+                      </div>
                       
-                      <Grid item xs={12}>
+                      <div className="md:col-span-2">
                         <TextField
                           fullWidth
                           label="Subject"
@@ -371,9 +371,9 @@ export default function ContactPage() {
                           disabled={loading}
                           className="bg-white"
                         />
-                      </Grid>
+                      </div>
                       
-                      <Grid item xs={12}>
+                      <div className="md:col-span-2">
                         <TextField
                           fullWidth
                           label="Your Message"
@@ -387,8 +387,8 @@ export default function ContactPage() {
                           disabled={loading}
                           className="bg-white"
                         />
-                      </Grid>
-                    </Grid>
+                      </div>
+                    </div>
 
                     <div className="space-y-4">
                       <Button
@@ -470,8 +470,8 @@ export default function ContactPage() {
                 </Button>
               </motion.div>
             </motion.div>
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       </div>
 
       <Snackbar

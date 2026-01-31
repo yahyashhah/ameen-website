@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { getDB, User, newId } from './db';
-import jwt from 'jsonwebtoken';
+import jwt, { type SignOptions, type Secret } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { redirect } from 'next/navigation';
 
@@ -42,7 +42,9 @@ export async function loginUser(email: string, password: string) {
   if (!user) throw new Error('Invalid credentials');
   const ok = await bcrypt.compare(password, user.passwordHash);
   if (!ok) throw new Error('Invalid credentials');
-  const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, SECRET, { expiresIn: EXPIRES_IN });
+  const payload = { id: user.id, email: user.email, role: user.role };
+  const opts: SignOptions = { expiresIn: EXPIRES_IN as any };
+  const token = jwt.sign(payload, SECRET as Secret, opts);
   const store = await cookies();
   store.set(AUTH_COOKIE, token, { httpOnly: true, path: '/', sameSite: 'lax', maxAge: 60 * 60 * 24 * 7 });
   return { id: user.id, email: user.email, role: user.role } as Session;

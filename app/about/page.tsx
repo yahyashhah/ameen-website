@@ -21,7 +21,6 @@ import {
   Typography,
   Button,
   Chip,
-  Grid,
 } from '@mui/material';
 
 export default function AboutPage() {
@@ -255,9 +254,9 @@ export default function AboutPage() {
             </Typography>
           </div>
           
-          <Grid container spacing={4}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {values.map((value, index) => (
-              <Grid item xs={12} sm={6} key={value.title}>
+              <div key={value.title}>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -278,9 +277,9 @@ export default function AboutPage() {
                     </CardContent>
                   </Card>
                 </motion.div>
-              </Grid>
+              </div>
             ))}
-          </Grid>
+          </div>
         </motion.div>
 
         {/* Team */}

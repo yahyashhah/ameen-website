@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   const key = process.env.STRIPE_SECRET_KEY;
   if (!sig || !secret || !key) return NextResponse.json({ ok: true });
-  const stripe = new Stripe(key, { apiVersion: '2024-12-18.acacia' });
+  const stripe = new Stripe(key, { apiVersion: '2024-11-20' as any });
   const body = await req.text();
   let event: Stripe.Event;
   try {

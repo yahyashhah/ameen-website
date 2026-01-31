@@ -24,11 +24,11 @@ import {
   CardContent,
   Typography,
   Button,
-  Grid,
   Chip,
   LinearProgress,
   Alert,
 } from '@mui/material';
+// Removed MUI Grid in favor of CSS grid for compatibility
 import {
   LineChart,
   Line,
@@ -149,13 +149,13 @@ export default function AdminHome() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
-            <Grid container spacing={3}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {[...Array(4)].map((_, i) => (
-                <Grid item xs={12} sm={6} lg={3} key={i}>
+                <div key={i}>
                   <Card className="h-40 bg-gray-200 rounded-2xl"></Card>
-                </Grid>
+                </div>
               ))}
-            </Grid>
+            </div>
           </div>
         </div>
       </div>
@@ -199,7 +199,7 @@ export default function AdminHome() {
         </motion.div>
 
         {/* Stats Cards */}
-        <Grid container spacing={3} className="mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
           {[
             {
               title: 'Total Revenue',
@@ -234,7 +234,7 @@ export default function AdminHome() {
               loading: loading,
             },
           ].map((stat, index) => (
-            <Grid item xs={12} sm={6} lg={3} key={stat.title}>
+            <div key={stat.title}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -273,14 +273,14 @@ export default function AdminHome() {
                   </CardContent>
                 </Card>
               </motion.div>
-            </Grid>
+            </div>
           ))}
-        </Grid>
+        </div>
 
         {/* Charts Section */}
-        <Grid container spacing={3} className="mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mb-8">
           {/* Sales Chart */}
-          <Grid item xs={12} lg={8}>
+          <div className="lg:col-span-2">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -327,10 +327,10 @@ export default function AdminHome() {
                 </CardContent>
               </Card>
             </motion.div>
-          </Grid>
+          </div>
 
           {/* Category Distribution */}
-          <Grid item xs={12} lg={4}>
+          <div className="lg:col-span-1">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -371,8 +371,8 @@ export default function AdminHome() {
                 </CardContent>
               </Card>
             </motion.div>
-          </Grid>
-        </Grid>
+          </div>
+        </div>
 
         {/* Quick Actions */}
         <motion.div
@@ -387,7 +387,7 @@ export default function AdminHome() {
                 Quick Actions
               </Typography>
               
-              <Grid container spacing={3}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
                 {[
                   {
                     title: 'Manage Orders',
@@ -418,7 +418,7 @@ export default function AdminHome() {
                     href: '/admin/analytics',
                   },
                 ].map((action, index) => (
-                  <Grid item xs={12} sm={6} md={3} key={action.title}>
+                  <div key={action.title}>
                     <Link href={action.href}>
                       <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer border-2 border-transparent hover:border-purple-200">
                         <div className={`inline-flex p-3 bg-${action.color}-100 rounded-lg mb-3`}>
@@ -432,17 +432,17 @@ export default function AdminHome() {
                         </Typography>
                       </Card>
                     </Link>
-                  </Grid>
+                  </div>
                 ))}
-              </Grid>
+              </div>
             </CardContent>
           </Card>
         </motion.div>
 
         {/* Recent Orders & Top Products */}
-        <Grid container spacing={3}>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           {/* Recent Orders */}
-          <Grid item xs={12} lg={8}>
+          <div className="lg:col-span-2">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -509,10 +509,10 @@ export default function AdminHome() {
                 </CardContent>
               </Card>
             </motion.div>
-          </Grid>
+          </div>
 
           {/* Top Products */}
-          <Grid item xs={12} lg={4}>
+          <div className="lg:col-span-1">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -571,8 +571,8 @@ export default function AdminHome() {
                 </CardContent>
               </Card>
             </motion.div>
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       </div>
     </div>
   );
