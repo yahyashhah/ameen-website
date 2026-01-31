@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Footer() {
   const brand = process.env.NEXT_PUBLIC_BRAND_NAME || 'Storefront';
   const currentYear = new Date().getFullYear();
@@ -34,30 +36,30 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Shop</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="/products" className="hover:text-white transition">All Products</a></li>
-              <li><a href="/collections" className="hover:text-white transition">Collections</a></li>
-              <li><a href="/products?featured=true" className="hover:text-white transition">Featured</a></li>
-              <li><a href="/products?sort=newest" className="hover:text-white transition">New Arrivals</a></li>
+              <li><Link href="/products" className="hover:text-white transition">All Products</Link></li>
+              <li><Link href="/collections" className="hover:text-white transition">Collections</Link></li>
+              <li><Link href="/products?featured=true" className="hover:text-white transition">Featured</Link></li>
+              <li><Link href="/products?sort=newest" className="hover:text-white transition">New Arrivals</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="/support" className="hover:text-white transition">FAQ</a></li>
-              <li><a href="/contact" className="hover:text-white transition">Contact Us</a></li>
-              <li><a href="/policies/shipping" className="hover:text-white transition">Shipping</a></li>
-              <li><a href="/policies/returns" className="hover:text-white transition">Returns</a></li>
+              <li><Link href="/support" className="hover:text-white transition">FAQ</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition">Contact Us</Link></li>
+              <li><Link href="/policies/shipping" className="hover:text-white transition">Shipping</Link></li>
+              <li><Link href="/policies/returns" className="hover:text-white transition">Returns</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-white font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="/about" className="hover:text-white transition">About Us</a></li>
-              <li><a href="/blog" className="hover:text-white transition">Blog</a></li>
-              <li><a href="/policies/privacy" className="hover:text-white transition">Privacy Policy</a></li>
-              <li><a href="/policies/terms" className="hover:text-white transition">Terms of Service</a></li>
+              <li><Link href="/about" className="hover:text-white transition">About Us</Link></li>
+              <li><Link href="/blog" className="hover:text-white transition">Blog</Link></li>
+              <li><Link href="/policies/privacy" className="hover:text-white transition">Privacy Policy</Link></li>
+              <li><Link href="/policies/terms" className="hover:text-white transition">Terms of Service</Link></li>
             </ul>
           </div>
         </div>
